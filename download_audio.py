@@ -1,6 +1,11 @@
 import requests
 import os
+import concurrent.futures
 
+def fetch_chunk(url):
+    response = requests.get(url)
+    response.raise_for_status()
+    return response.content
 
 def download_audio_from_playlist(playlist_url):
     try:
@@ -23,16 +28,18 @@ def download_audio_from_playlist(playlist_url):
         # Fetch all chunks
         chunks = []
         print("fetching chunks")
-        for index, url in enumerate(chunk_urls):
-            chunk_response = requests.get(url)
-            chunk_response.raise_for_status()
-            chunks.append(chunk_response.content)
-            print(chunk_response, index, "/", len(chunk_urls))
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            # Map the fetch_chunk function to the chunk URLs
+            results = list(executor.map(fetch_chunk, chunk_urls))
 
-        # Combine chunks into a single byte array
-        combined_chunks = b''.join(chunks)
+            for index, content in enumerate(results):
+                chunks.append(content)
+                print("Fetched chunk", index + 1, "/", len(chunk_urls))
 
-        print("fetched all chunks")
+            # Combine chunks into a single byte array
+            combined_chunks = b''.join(chunks)
+
+            print("fetched all chunks")
 
         # Write the combined audio data to a file
         output_path = os.path.join(os.path.dirname(__file__),

@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Example usage
-audio_space_id = "1lPKqOQbOAwJb"
+audio_space_id = "1rmxPolzXaDJN"
 bearer_token = os.getenv("BEARER_TOKEN")
 
 print(os.getenv('AUTH_TOKEN'))
@@ -28,6 +28,9 @@ def main():
                                     cookies_string)
 
         print(f"Got playlist URL: {playlist_url}")
+
+        if playlist_url == None:
+            raise ValueError("Playlist URL is None")
 
         # Download audio from playlist
         download_audio_from_playlist(playlist_url)
