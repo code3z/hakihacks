@@ -1,0 +1,1 @@
+This is a scraper for X Spaces, built in Python, that I made to contribute to the [HakiHacks Hackathon](https://x.com/hakihack_ke/status/1820097252691734692). Our project was scraping X spaces where Kenyans organize to discuss politics, summarizing them and sending them out for people who don't have the time or the data to listen themselves.
